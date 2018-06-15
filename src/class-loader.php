@@ -141,11 +141,12 @@ class Loader {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string|array $templates The name of the template.
-	 * @param array        $args Variables to pass to partial.
+	 * @param string|array   $templates The name of the template.
+	 * @param array          $args Variables to pass to partial.
+	 * @param (false|string) $path Optional view base path.
 	 */
-	public static function view( $templates, $args = [] ) {
-		echo self::get_view( $templates, $args, self::$base_path ); // WPCS: XSS okay.
+	public static function view( $templates, $args = [], $path = false ) {
+		echo self::get_view( $templates, $args, $path ); // WPCS: XSS okay.
 	}
 
 	/**
@@ -153,11 +154,12 @@ class Loader {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string|array $templates The name of the template.
-	 * @param array        $args Variables to pass to partial.
+	 * @param string|array   $templates The name of the template.
+	 * @param array          $args Variables to pass to partial.
+	 * @param (false|string) $path Optional view base path.
 	 * @return string
 	 */
-	public static function get_view( $templates, $args = [] ) {
+	public static function get_view( $templates, $args = [], $path = false ) {
 		if ( ! is_array( $templates ) ) {
 			$templates = [ $templates ];
 		}
@@ -169,9 +171,13 @@ class Loader {
 
 		$_templates = [];
 
+		if ( ! $path ) {
+			$path = self::$base_path;
+		}
+
 		foreach ( $templates as $key => $template_name ) {
 			$_templates[] = $template_name . '.php';
-			$_templates[] = trailingslashit( self::$base_path ) . $template_name . '.php';
+			$_templates[] = trailingslashit( $path ) . $template_name . '.php';
 		}
 
 		$template = locate_template( $_templates );
