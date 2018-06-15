@@ -123,7 +123,7 @@ class Loader {
 							unset( $templates[ $k ] );
 						}
 
-						$_templates[] = trailingslashit( self::$layout_dir ) . $template;
+						$_templates[] = trailingslashit( self::$base_path ) . trailingslashit( self::$layout_dir ) . $template;
 					}
 
 					// Merge with original. This allows child themes to avoid /resources/views/ structure.
